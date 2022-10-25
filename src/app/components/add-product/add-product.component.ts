@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/models/product';
 import { ProductsService } from 'src/app/services/products.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-product',
@@ -11,7 +12,12 @@ export class AddProductComponent implements OnInit {
   public name:string|null=null;
   public quantity:number|null=null;
 
-  constructor(private productService:ProductsService) { }
+  constructor(
+    private productService:ProductsService,
+    private router:Router
+  ) { 
+
+  }
 
   ngOnInit(): void {
   }
@@ -21,6 +27,8 @@ export class AddProductComponent implements OnInit {
       this.productService.addProduct(this.name, this.quantity);
       this.name=null;
       this.quantity=null;
+      this.router.navigate(["/"]);
+
     }
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Product } from '../models/product';
 
 @Injectable({
@@ -6,23 +6,40 @@ import { Product } from '../models/product';
 })
 export class ProductsService {
   private _products:Product[]=[];
+  private _productsUpdate=new EventEmitter();
 
   constructor() {
-    this.load();
+   
    }
 
    public addProduct(name:string,quantity:number){
     this._products.push(new Product(name, quantity));
     this.save();
+    this._productsUpdate.emit();
    }
 
    public deleteProduct(n:number){
     this._products.splice(n,1);
     this.save();
+    this._productsUpdate.emit();
+   }
+
+   public getProduct(n:number){
+    return this._products[n];
+   }
+
+   public saveProduct(n:number,name:string,quantity:number){
+    this._products[n]={name:name, quantity:quantity};
+    this.save();
+    this._productsUpdate.emit();
    }
 
    public get products(){
     return this._products;
+   }
+
+   public get productsUpdate(){
+    return this._productsUpdate;
    }
 
    public save(){
